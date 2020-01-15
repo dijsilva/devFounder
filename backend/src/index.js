@@ -8,6 +8,7 @@ mongoose.connect('mongodb+srv://dijsilva:dijsilva@cluster0-e3pi1.mongodb.net/omn
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false
 })
 
 app.use(express.json());

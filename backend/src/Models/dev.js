@@ -16,7 +16,8 @@ const DevSchema = new mongoose.Schema({
         type: PointSchema,
         //when work with coordinate values is necessary create a index. In this cases, the index = 2dsphere.
         index: '2dsphere'
-    }
+    },
+    codeForIdConfirmation: String,
 })
 
 
