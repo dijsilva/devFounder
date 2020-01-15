@@ -30,11 +30,11 @@ module.exports = {
 
             
             if (!codeForIdConfirmation){
-                return res.json({error: 'The code for id confirmation need be defined '})
+                return res.status(400).json({error: 'The code for id confirmation need be defined '})
             }
             
             if (codeForIdConfirmation != codeForIdConfirmation_confirm){
-                return res.json({error: 'The code for id confirmation and code confirm need be equals.'})
+                return res.status(400).json({error: 'The code for id confirmation and code confirm need be equals.'})
             }
 
             const codeForIdConfirmationHash = await bcrypt.hash(codeForIdConfirmation, 10)
@@ -67,7 +67,7 @@ module.exports = {
         const codeForIdConfirmationHash = await bcrypt.compare(codeForIdConfirmation, dev.codeForIdConfirmation)
         
         if (!codeForIdConfirmationHash){
-            return res.json({error: 'The codefor id confirmation is incorrect'})
+            return res.status(400).json({error: 'The codefor id confirmation is incorrect'})
         }
 
         const techsVector = parseStringASVector(techs)
@@ -97,13 +97,13 @@ module.exports = {
         const dev = await Dev.findOne({github_user})
 
         if (!dev){
-            return res.json({error: 'User not found'})
+            return res.status(400).json({error: 'User not found'})
         }
 
         const codeForIdConfirmationHash = await bcrypt.compare(codeForIdConfirmation, dev.codeForIdConfirmation)
         
         if (!codeForIdConfirmationHash){
-            return res.json({error: 'The codefor id confirmation is incorrect'})
+            return res.status(400).json({error: 'The codefor id confirmation is incorrect'})
         }
 
         await Dev.findOneAndDelete({github_user})
