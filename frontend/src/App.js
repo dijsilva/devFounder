@@ -30,14 +30,21 @@ function App() {
 
     await api.post('storeDevs', data).then(
       response => {
-        console.log(response)
         setDevs([...devs, response.data])
       }
     ).catch(err => {
-      toast.error(`${err.response.data.error}` ,{
+      toast.error(`${err.response.data.error}` , {
         position: "top-right",
         autoClose: 4000,
       });
+    })
+  }
+
+  async function deleteDev(data_of_user){
+    await api.delete('deleteDev', {data: data_of_user}).then(response => {
+      setDevs([devs.filter(dev => dev.github_user != data_of_user.github_user)])
+    }).catch(err => {
+      console.log(err.response)
     })
   }
 
@@ -45,13 +52,13 @@ function App() {
     <div id="app">
       <aside>
         <strong>Cadastrar</strong>
-        <Form onSubmit={saveDev}/>
+        <Form onSubmit={saveDev} />
       </aside>
       
       <main>
         <ul>
           {devs.map(dev => (
-            <Dev key={dev._id} dev={dev} />
+            <Dev key={dev._id} dev={dev} onDelete={deleteDev} />
           ))}
         </ul>
       </main>
