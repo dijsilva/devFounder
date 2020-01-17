@@ -56,28 +56,28 @@ module.exports = {
     },
 
     async update(req, res){
+
         const { github_user, techs, longitude, latitude, codeForIdConfirmation, name, bio } = req.body
-
-        const dev = await Dev.findOne({github_user})
-
+        const dev = await Dev.findOne({ github_user })
+        
         if (!dev){
             return res.json({error: 'User not found'})
         }
-
+        
         const codeForIdConfirmationHash = await bcrypt.compare(codeForIdConfirmation, dev.codeForIdConfirmation)
         
         if (!codeForIdConfirmationHash){
             return res.status(400).json({error: 'The codefor id confirmation is incorrect'})
         }
-
+        
         const techsVector = parseStringASVector(techs)
-
+        
         const location = {
             type: 'Point',
             coordinates: [longitude, latitude]
         }
-
-        const updateDev = await Dev.findOneAndUpdate( github_user, {
+        
+        const updateDev = await Dev.findOneAndUpdate( {github_user} , {
             techs: techsVector,
             location,
             bio,
@@ -85,6 +85,8 @@ module.exports = {
         }, {
             returnOriginal: false
         })
+
+        console.log(updateDev)
 
         updateDev.codeForIdConfirmation = undefined
 

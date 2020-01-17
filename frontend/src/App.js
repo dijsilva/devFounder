@@ -11,6 +11,7 @@ import './main.css'
 import Form from './components/FormAside'
 import Dev from './components/DevCompt'
 
+
 function App() {
 
   const [devs, setDevs] = useState([])
@@ -40,11 +41,25 @@ function App() {
     })
   }
 
-  async function deleteDev(data_of_user){
+  async function confirmDeleteDev(data_of_user){
     await api.delete('deleteDev', {data: data_of_user}).then(response => {
-      setDevs([devs.filter(dev => dev.github_user != data_of_user.github_user)])
+      setDevs(devs.filter(dev => dev.github_user !== data_of_user.github_user))
     }).catch(err => {
-      console.log(err.response)
+      toast.error(`${err.response.data.error}` , {
+        position: "top-right",
+        autoClose: 4000,
+      });
+    })
+  }
+
+  async function confirmUpdateDev(data_of_user){
+    await api.post('updateDev', data_of_user).then(response => {
+      setDevs(devs.map(dev => dev.github_user !== data_of_user.github_user ? dev : dev = response.data ))
+    }).catch(err => {
+      toast.error(`${err.response.data.error}` , {
+        position: "top-right",
+        autoClose: 4000,
+      });
     })
   }
 
@@ -58,7 +73,7 @@ function App() {
       <main>
         <ul>
           {devs.map(dev => (
-            <Dev key={dev._id} dev={dev} onDelete={deleteDev} />
+            <Dev key={dev._id} dev={dev} onConfirmDelete={confirmDeleteDev} onUpdate={confirmUpdateDev} />
           ))}
         </ul>
       </main>

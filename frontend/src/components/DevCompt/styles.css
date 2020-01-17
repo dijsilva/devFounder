@@ -60,3 +60,67 @@ li a {
 li a:hover {
     color: #5a2ea6
 }
+
+#modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 15px 10px;
+    align-items: center;
+    /* height: 250px; */
+    box-shadow:  0 0 10px 0 #999;
+    border-radius: 5px;
+}
+
+#modal h1 {
+    font-size: 25px;
+}
+
+#modal p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+#modal button {
+    border: 0;
+    margin-top: 20px;
+    background: #7d40e7;
+    border-radius: 2px;
+    padding: 15px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#modal form {
+    display: flex;
+    flex-direction: column;
+}
+
+#modal form label {
+    color: #acacac;
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+}
+
+#modal form input {
+    width: 100%;
+    text-align: center;
+    height: 32px;
+    font-size: 14px;
+    color: #666;
+    border: 0;
+    border-bottom: 1px solid #eee;
+}
+
+
+#closeModal {
+    display: flex;
+    padding: 3px;
+    padding-bottom: 6px;
+    justify-content: flex-end;
+}
