@@ -1,4 +1,4 @@
-import {createAppContainer} from 'react-navigation'
+import {createAppContainer, createSwitchNavigator} from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack';
 
 
@@ -26,7 +26,8 @@ const Routes = createAppContainer(
                 backgroundColor: "#7d40e7",
             },
             headerTitleAlign: "center"
-        }
+        },
+        mode: "card"
     })
 )
 
