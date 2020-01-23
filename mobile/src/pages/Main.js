@@ -4,8 +4,32 @@ import MapView, {Marker, Callout} from 'react-native-maps'
 import {getCurrentPositionAsync, requestPermissionsAsync} from 'expo-location'
 import { MaterialIcons } from '@expo/vector-icons'
 
+import api from '../services/api'
+
 function Main({ navigation }){
+    const [devs, setDevs] = useState([])
     const [currentPositon, setCurrentPositon] =  useState(null)
+
+
+    function onRegionChangeComplete(region){
+        setCurrentPositon(region)
+
+    }
+
+    async function loadDevs(){
+        const { latitude, longitude } = currentPositon
+
+        const response = await api.get('search', {
+            params: {
+                latitude,
+                longitude,
+                techs: 'React Native'
+            }
+        })
+
+        console.log(response.data)
+        setDevs(response.data)
+    }
 
     useEffect(() => {
         async function loadPosition(){
@@ -37,19 +61,21 @@ function Main({ navigation }){
 
     return (
         <>
-        <MapView initialRegion={currentPositon}  style={styles.map}>
-            <Marker coordinate={{latitude: -15.7542661, longitude: -47.8860943}}>
-                <Image source={{uri: 'https://avatars0.githubusercontent.com/u/2254731?s=460&v=4'}} style={styles.avatar} />
+        <MapView onRegionChangeComplete={onRegionChangeComplete} initialRegion={currentPositon}  style={styles.map}>
+            {devs.map(dev => (
+                <Marker key={dev.id}  coordinate={{latitude: dev.location.coordinates[1], longitude: dev.location.coordinates[0]}}>
+                <Image source={{uri: dev.avatar_url}} style={styles.avatar} />
                 <Callout onPress={() => {
-                    navigation.navigate("Profile", { github_user: 'diego3g' })
+                    navigation.navigate("Profile", { github_user: `${dev.github_user}` })
                 }}>
                     <View style={styles.callout}>
-                        <Text style={styles.name}>Diego Fernandes</Text>
-                        <Text style={styles.bio}>CTO na RocketSeat</Text>
-                        <Text style={styles.techs}>ReactJS, React Native e Node.js</Text>
+                        <Text style={styles.name}>{dev.name}</Text>
+                        <Text style={styles.bio}>{dev.bio}</Text>
+                        <Text style={styles.techs}>{dev.techs}</Text>
                     </View>
                 </Callout>
             </Marker>
+            ))}
         </MapView>
         <View style={styles.buttonView}>
             <TextInput style={styles.searchInput}
@@ -60,7 +86,7 @@ function Main({ navigation }){
             ></TextInput>
             <TouchableOpacity
             style={styles.touchButton}
-            onPress={() => {}}
+            onPress={loadDevs}
             >
             <MaterialIcons name="my-location" size={20} color="#fff" />
             </TouchableOpacity>
@@ -82,6 +108,7 @@ const styles = StyleSheet.create({
     },
     callout: {
         width: 260,
+         
     },
     name: {
         fontWeight: "bold",
@@ -92,7 +119,8 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     techs: {
-        marginTop: 5
+        marginTop: 5,
+        marginBottom: 2
     }, 
     buttonView: {
         position: "absolute",
